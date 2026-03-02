@@ -12,12 +12,10 @@ body {
   text-align: center;
   margin: 80px;
 }
-
 input {
   width: 400px;
   padding: 10px;
 }
-
 .result {
   margin-top: 20px;
   max-width: 600px;
@@ -25,15 +23,9 @@ input {
   margin-right: auto;
   text-align: left;
 }
-
 .article {
   padding: 10px;
   border-bottom: 1px solid #ddd;
-  cursor: pointer;
-}
-
-.article:hover {
-  background: #f3f3f3;
 }
 </style>
 </head>
@@ -41,7 +33,9 @@ input {
 
 <h1>Solid Busca</h1>
 
-<input type="text" id="search" placeholder="Buscar..." onkeyup="buscar()">
+<input type="text" id="search" placeholder="Buscar...">
+
+<button onclick="buscar()">Buscar</button>
 
 <div id="resultados" class="result"></div>
 
@@ -53,13 +47,7 @@ const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function buscar() {
-  const { data, error } = await db
-    .from("artigos")
-    .select("*");
-
-  console.log("DATA:", data);
-  console.log("ERROR:", error);
-}
+  const termo = document.getElementById("search").value;
 
   const { data, error } = await db
     .from("artigos")
@@ -67,17 +55,17 @@ async function buscar() {
     .ilike("titulo", "%" + termo + "%");
 
   if (error) {
-    console.error("Erro:", error);
+    console.error(error);
     return;
   }
 
   let html = "";
 
   data.forEach(function(item) {
-    html += "<div class='article'><strong>" 
-      + item.titulo + 
-      "</strong><br>" 
-      + item.conteudo + 
+    html += "<div class='article'><strong>" +
+      item.titulo +
+      "</strong><br>" +
+      item.conteudo +
       "</div>";
   });
 
