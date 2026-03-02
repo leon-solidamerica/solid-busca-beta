@@ -47,19 +47,22 @@ const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function buscar() {
+  const termo = document.getElementById("search").value;
+
   const { data, error } = await db
     .from("artigos")
-    .select("*");
+    .select("*")
+    .ilike("titulo", "%" + termo + "%")
 
-  console.log("DATA:", data);
-  console.log("ERROR:", error);
-
-  if (error) return;
+  if (error) {
+    console.error(error);
+    return;
+  }
 
   let html = "";
 
   data.forEach(function(item) {
-    html += "<div><strong>" +
+    html += "<div class='article'><strong>" +
       item.titulo +
       "</strong><br>" +
       item.conteudo +
