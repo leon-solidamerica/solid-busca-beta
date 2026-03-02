@@ -52,7 +52,7 @@ async function buscar() {
   const { data, error } = await db
     .from("artigos")
     .select("*")
-    .ilike("titulo", "%" + termo + "%");
+    .select("*");
 
   if (error) {
     console.error(error);
