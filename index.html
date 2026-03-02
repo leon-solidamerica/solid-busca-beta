@@ -47,17 +47,14 @@ const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function buscar() {
-  const termo = document.getElementById("search").value;
-
   const { data, error } = await db
     .from("artigos")
-    .select("*")
-    .ilike("titulo", "%" + termo + "%");
+    .select("*");
 
-  if (error) {
-    console.error(error);
-    return;
-  }
+  console.log("DATA:", data);
+  console.log("ERROR:", error);
+
+  if (error) return;
 
   let html = "";
 
