@@ -53,12 +53,13 @@ const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function buscar() {
-  let termo = document.getElementById("search").value;
+  const { data, error } = await db
+    .from("artigos")
+    .select("*");
 
-  if (termo.length < 2) {
-    document.getElementById("resultados").innerHTML = "";
-    return;
-  }
+  console.log("DATA:", data);
+  console.log("ERROR:", error);
+}
 
   const { data, error } = await db
     .from("artigos")
