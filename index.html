@@ -1,54 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Solid Busca</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<title>Solid Busca</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  margin: 80px;
+}
+
+input {
+  width: 400px;
+  padding: 10px;
+}
+
+.result {
+  margin-top: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.article {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.article:hover {
+  background: #f3f3f3;
+}
+</style>
 </head>
-<body style="font-family: Arial; text-align: center; margin-top: 80px;">
+<body>
 
-  <h1>Solid Busca</h1>
-  <input type="text" id="busca" placeholder="Buscar..." onkeyup="if(event.key === 'Enter') buscar();
+<h1>Solid Busca</h1>
 
-const { data, error } = await db
-  .from("artigos")
-  .select("*")
-  .ilike("titulo", "%" + termo + "%");
+<input type="text" id="search" placeholder="Buscar..." onkeyup="buscar()">
 
-console.log("DATA:", data);
-console.log("ERROR:", error);)" />
-  <div id="resultados" style="margin-top:20px;"></div>
+<div id="resultados" class="result"></div>
 
-  <script>
-    const SUPABASE_URL = "https://ljitoiksdcejzywdkzug.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_kiou9x6LO2MJfAdACvcn4w_wzUSFwEf";
+<script>
+const SUPABASE_URL = "https://ljitoiksdcejzywdkzug.supabase.co";
+const SUPABASE_KEY = "sb_publishable_kiou9x6LO2MJfAdACvcn4w_wzUSFwEf";
 
-    const { createClient } = supabase;
-    const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function buscar() {
-      const termo = document.getElementById("busca").value;
+async function buscar() {
+  let termo = document.getElementById("search").value;
 
-      const { data, error } = await db
-        .from("artigos")
-        .select("*")
-        .ilike("titulo", `%${termo}%`);
+  if (termo.length < 2) {
+    document.getElementById("resultados").innerHTML = "";
+    return;
+  }
 
-      if (error) {
-        console.error(error);
-        return;
-      }
+  const { data, error } = await db
+    .from("artigos")
+    .select("*")
+    .ilike("titulo", "%" + termo + "%");
 
-      const resultados = document.getElementById("resultados");
-      resultados.innerHTML = "";
+  if (error) {
+    console.error("Erro:", error);
+    return;
+  }
 
-      data.forEach(item => {
-        const div = document.createElement("div");
-        div.innerHTML = `<p>${item.titulo}</p>`;
-        resultados.appendChild(div);
-      });
-    }
-  </script>
+  let html = "";
+
+  data.forEach(function(item) {
+    html += "<div class='article'><strong>" 
+      + item.titulo + 
+      "</strong><br>" 
+      + item.conteudo + 
+      "</div>";
+  });
+
+  document.getElementById("resultados").innerHTML = html;
+}
+</script>
 
 </body>
 </html>
