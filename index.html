@@ -52,7 +52,7 @@ async function buscar() {
   const { data, error } = await db
     .from("artigos")
     .select("*")
-    .ilike("titulo", "%" + termo + "%")
+    .ilike("titulo", "%" + termo + "%");
 
   if (error) {
     console.error(error);
@@ -62,7 +62,7 @@ async function buscar() {
   let html = "";
 
   data.forEach(function(item) {
-    html += "<div class='article'><strong>" +
+    html += "<div><strong>" +
       item.titulo +
       "</strong><br>" +
       item.conteudo +
