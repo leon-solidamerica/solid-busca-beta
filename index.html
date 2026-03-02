@@ -1,0 +1,39 @@
+<script>
+const { createClient } = supabase;
+
+const supabaseClient = createClient(
+  "SUA_URL_SUPABASE",
+  "SUA_CHAVE_PUBLICA"
+);
+
+async function buscar() {
+  let termo = document.getElementById("search").value;
+
+  if (termo.length < 2) {
+    document.getElementById("resultados").innerHTML = "";
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("artigos")
+    .select("*")
+    .ilike("titulo", "%" + termo + "%");
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  let html = "";
+
+  data.forEach(item => {
+    html += `
+      <div class="article" onclick="alert('${item.conteudo.replace(/'/g, "\\'")}')">
+        <strong>${item.titulo}</strong>
+      </div>
+    `;
+  });
+
+  document.getElementById("resultados").innerHTML = html;
+}
+</script>
