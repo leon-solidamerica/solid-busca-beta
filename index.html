@@ -22,7 +22,7 @@
       const termo = document.getElementById("busca").value;
 
       const { data, error } = await db
-        .from("imoveis")
+        .from("artigos")
         .select("*")
         .ilike("titulo", `%${termo}%`);
 
